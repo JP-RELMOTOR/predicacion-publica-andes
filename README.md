@@ -32,15 +32,22 @@ misma red Wi-Fi).
 
 Admins precargados: **Bastián Zelada**, **Pablo Vargas**, **Juan Pablo Correa**.
 
-## Estado actual y próximo paso
+## En línea
 
-⚠️ **Esta versión guarda los datos en el mismo dispositivo** (en el navegador). Sirve para
-probar toda la experiencia, pero para que **todos los hermanos compartan los mismos datos**
-(que el encargado vea lo que marcan desde sus celulares) falta el **siguiente paso**:
+- **App publicada:** https://jp-relmotor.github.io/predicacion-publica-andes/
+- **Repo:** https://github.com/JP-RELMOTOR/predicacion-publica-andes
+- Cada `git push` a `main` la vuelve a publicar sola (GitHub Actions).
 
-1. Conectar una **base de datos en línea gratuita** (Supabase) — toda la lógica ya está
-   preparada en `src/store.ts` para enchufarla.
-2. Publicar la web en un **enlace gratuito** (Vercel / Netlify) para compartir por WhatsApp.
+## Paso pendiente: conectar la base de datos compartida (gratis)
+
+⚠️ Hasta conectar Firebase, la app **guarda los datos en cada dispositivo** (modo local).
+Para que **todos compartan los mismos datos en tiempo real**, falta pegar la config de
+Firebase (5 min, gratis). Pasos completos en [`src/firebaseConfig.ts`](src/firebaseConfig.ts):
+
+1. Crear proyecto en https://console.firebase.google.com → activar **Realtime Database**.
+2. Copiar el `firebaseConfig` (ícono web `</>`) y pegarlo en `src/firebaseConfig.ts`.
+3. Publicar las reglas de [`database.rules.json`](database.rules.json) en la consola.
+4. `git push` (o el auto-deploy) y listo: datos compartidos.
 
 ## Estructura del código
 
