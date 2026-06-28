@@ -1,0 +1,16 @@
+{
+  "name": "Predicación Pública · Andes",
+  "short_name": "Predicación",
+  "description": "Disponibilidad y programa de la predicación pública con carritos y exhibidores — Congregación Andes.",
+  "lang": "es",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#075985",
+  "background_color": "#f1f5f9",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
