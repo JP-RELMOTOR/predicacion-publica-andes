@@ -1,0 +1,42 @@
+{
+  "rules": {
+    "//": "Predicación Pública Andes · reglas de Firebase Realtime Database.",
+    "//1": "Todo cerrado por defecto. Solo el árbol 'predicacion' es accesible.",
+    "//2": "No hay login: la app escribe sin token. NO es seguridad real, solo",
+    "//3": "limita el daño (estructura validada, sin claves basura).",
+
+    ".read": false,
+    ".write": false,
+
+    "predicacion": {
+      ".read": true,
+      ".write": true,
+
+      "hermanos": {
+        "$id": { ".validate": "newData.hasChildren(['id','nombre'])" }
+      },
+      "puntos": {
+        "$id": { ".validate": "newData.hasChildren(['id','nombre'])" }
+      },
+      "meses": {
+        "$id": { ".validate": "newData.hasChildren(['id'])" }
+      },
+      "disponibilidad": {
+        "$mes": {
+          "$hermano": { ".validate": "newData.hasChildren(['hermanoId','mesId'])" }
+        }
+      },
+      "asignaciones": {
+        "$mes": {
+          "$slot": { ".validate": true }
+        }
+      },
+      "config": {
+        ".validate": true,
+        "$campo": { ".validate": true }
+      },
+
+      "$otro": { ".validate": false }
+    }
+  }
+}
