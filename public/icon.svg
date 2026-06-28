@@ -73,7 +73,7 @@
 
     <!-- ===== Ruedas ===== -->
     <circle cx="196" cy="452" r="26" fill="#1c2b3a"/>
-    <circle cx="196" cy="452" r="10" fill="#5b7governments"/>
+    <circle cx="196" cy="452" r="10" fill="#5b7a99"/>
     <circle cx="284" cy="452" r="26" fill="#1c2b3a"/>
     <circle cx="284" cy="452" r="10" fill="#5b7a99"/>
   </g>
