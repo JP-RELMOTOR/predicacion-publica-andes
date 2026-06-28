@@ -19,13 +19,13 @@
 // ============================================================================
 
 export const FIREBASE_CONFIG = {
-  apiKey: 'PEGAR_API_KEY',
-  authDomain: 'PEGAR_AUTH_DOMAIN',
-  databaseURL: 'PEGAR_DATABASE_URL',
-  projectId: 'PEGAR_PROJECT_ID',
-  storageBucket: 'PEGAR_STORAGE_BUCKET',
-  messagingSenderId: 'PEGAR_SENDER_ID',
-  appId: 'PEGAR_APP_ID',
+  apiKey: 'AIzaSyCX7POHaAQTNGgH3Trrl9zj35myWWhjqeU',
+  authDomain: 'predicacion-andes.firebaseapp.com',
+  databaseURL: 'https://predicacion-andes-default-rtdb.firebaseio.com',
+  projectId: 'predicacion-andes',
+  storageBucket: 'predicacion-andes.firebasestorage.app',
+  messagingSenderId: '451038257204',
+  appId: '1:451038257204:web:b6914f2f40b9b960a92a61',
 }
 
 // ¿Está configurada la nube? (si no, la app usa solo localStorage)
