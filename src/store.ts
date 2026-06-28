@@ -121,7 +121,10 @@ function cloudAEstado(val: any): AppState {
   const meses: Mes[] = Object.values(val.meses ?? {})
   const disponibilidad: Disponibilidad[] = []
   for (const porHermano of Object.values<any>(val.disponibilidad ?? {})) {
-    for (const d of Object.values<any>(porHermano)) disponibilidad.push(d)
+    for (const d of Object.values<any>(porHermano)) {
+      // Firebase omite arreglos vacíos: garantizamos que existan
+      disponibilidad.push({ ...d, semana: d.semana ?? [], sabados: d.sabados ?? [] })
+    }
   }
   const asignaciones: AppState['asignaciones'] = {}
   for (const [mid, slots] of Object.entries<any>(val.asignaciones ?? {})) {
