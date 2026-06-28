@@ -77,4 +77,8 @@
     <circle cx="284" cy="452" r="26" fill="#1c2b3a"/>
     <circle cx="284" cy="452" r="10" fill="#5b7a99"/>
   </g>
+
+  <!-- Palabra ANDES -->
+  <text x="258" y="479" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="62" font-weight="800" letter-spacing="4" fill="#0b3a66" opacity="0.35">ANDES</text>
+  <text x="256" y="476" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="62" font-weight="800" letter-spacing="4" fill="#ffffff">ANDES</text>
 </svg>
