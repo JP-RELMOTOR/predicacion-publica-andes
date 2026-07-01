@@ -83,6 +83,26 @@ export default function PuntosGaleria() {
             </div>
           </Tarjeta>
 
+          {/* Mapa */}
+          {sel.lat != null && sel.lng != null ? (
+            <Tarjeta className="p-2">
+              <MapaPunto lat={sel.lat} lng={sel.lng} nombre={sel.nombre} />
+            </Tarjeta>
+          ) : (
+            <Tarjeta className="p-4 text-center text-sm text-slate-400">
+              🗺️ Mapa disponible pronto
+            </Tarjeta>
+          )}
+
+          <a
+            href={gmaps}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block w-full text-center rounded-xl bg-sky-700 text-white font-semibold py-3 hover:bg-sky-800"
+          >
+            🧭 Abrir en Google Maps
+          </a>
+
           {/* Retiro del exhibidor + contacto */}
           <Tarjeta className="p-4">
             <h3 className="font-bold text-slate-800 mb-2">
