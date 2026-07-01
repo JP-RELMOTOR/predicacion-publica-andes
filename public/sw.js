@@ -1,7 +1,14 @@
 // Service worker · Predicación Pública Andes
-const CACHE = 'ppa-v1'
+const CACHE = 'ppa-v2'
 
-self.addEventListener('install', () => {
+self.addEventListener('install', (e) => {
+  // precache del index para que el arranque offline funcione
+  e.waitUntil(
+    caches
+      .open(CACHE)
+      .then((c) => c.add('./index.html'))
+      .catch(() => {}),
+  )
   self.skipWaiting()
 })
 
@@ -27,13 +34,22 @@ self.addEventListener('fetch', (e) => {
   )
     return
 
-  // Navegación: red primero, con respaldo a la app cacheada (offline)
+  // Navegación: SIEMPRE revalidar contra la red (evita quedar pegado en una
+  // versión vieja); respaldo al index cacheado si no hay internet.
   if (req.mode === 'navigate') {
-    e.respondWith(fetch(req).catch(() => caches.match('./index.html')))
+    e.respondWith(
+      fetch(req, { cache: 'no-cache' })
+        .then((res) => {
+          const copy = res.clone()
+          caches.open(CACHE).then((c) => c.put('./index.html', copy))
+          return res
+        })
+        .catch(() => caches.match('./index.html')),
+    )
     return
   }
 
-  // Recursos: caché primero, si no, red (y se cachea)
+  // Recursos (JS/CSS con hash, tiles del mapa, etc.): caché primero
   e.respondWith(
     caches.match(req).then(
       (hit) =>
