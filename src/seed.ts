@@ -1,39 +1,38 @@
 import type { Punto } from './types'
 
-// ---- Puntos / exhibidores ----
+// ---- Puntos de predicación ----
+// El NOMBRE del punto es el lugar donde se predica; el retiro del exhibidor
+// es la dirección/familia donde se busca el carrito o pendón.
 // NOTA: los hermanos NO se siembran desde el código (privacidad: el repo es
 // público). La lista de hermanos vive únicamente en Firebase; los admins la
 // gestionan desde Admin → Hermanos.
 export const PUNTOS_SEMILLA: Punto[] = [
   {
     id: 'p_correa',
-    nombre: 'Carrito Tadeo Vargas 892',
+    nombre: 'San Pablo / Radal',
     tipo: 'carrito',
     familia: 'Familia Correa',
     lugarRetiro: 'Tadeo Vargas 892',
-    lugarAsignacion: 'San Pablo / Radal',
     operaSemana: true,
     operaSabado: true,
     activo: true,
   },
   {
     id: 'p_oyarce',
-    nombre: 'Carrito Alejandro Fierro 4464',
+    nombre: 'Plaza Simón Bolívar',
     tipo: 'carrito',
     familia: 'Familia Oyarce',
     lugarRetiro: 'Alejandro Fierro 4464',
-    lugarAsignacion: 'Plaza Simón Bolívar',
     operaSemana: true,
     operaSabado: true,
     activo: true,
   },
   {
     id: 'p_mansilla',
-    nombre: 'Pendón Radal',
+    nombre: 'Acceso Edificios RADAL 1225',
     tipo: 'pendon',
     familia: 'Familia Mansilla',
     lugarRetiro: 'Radal 1225',
-    lugarAsignacion: 'Acceso Edificios RADAL 1225',
     operaSemana: false,
     operaSabado: true,
     activo: true,
