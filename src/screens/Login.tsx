@@ -65,19 +65,6 @@ export default function Login() {
             </div>
           )}
         </div>
-
-        <p className="text-center text-xs text-slate-400 mt-6">
-          ¿No apareces?{' '}
-          <button
-            className="underline"
-            onClick={() => {
-              const n = prompt('Escribe tu nombre completo:')
-              if (n && n.trim()) acciones.agregarHermano(n.trim())
-            }}
-          >
-            Agrégate aquí
-          </button>
-        </p>
       </div>
     </div>
   )
