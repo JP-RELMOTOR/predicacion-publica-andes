@@ -10,7 +10,7 @@ function FotoPunto({ punto, alta = false }: { punto: Punto; alta?: boolean }) {
       <img
         src={punto.foto}
         alt={punto.nombre}
-        className={`object-cover w-full ${alta ? 'h-52' : 'h-20 w-20 rounded-xl'}`}
+        className={`object-cover ${alta ? 'h-52 w-full' : 'h-20 w-20 rounded-xl shrink-0'}`}
       />
     )
   }
@@ -28,6 +28,11 @@ function FotoPunto({ punto, alta = false }: { punto: Punto; alta?: boolean }) {
   )
 }
 
+// normaliza un teléfono a formato wa.me / tel:
+function telLimpio(t: string): string {
+  return t.replace(/[^\d+]/g, '')
+}
+
 export default function PuntosGaleria() {
   const s = useApp()
   const [sel, setSel] = useState<Punto | null>(null)
@@ -37,8 +42,9 @@ export default function PuntosGaleria() {
       sel.lat != null && sel.lng != null
         ? `https://www.google.com/maps/search/?api=1&query=${sel.lat},${sel.lng}`
         : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-            `${sel.lugarAsignacion}, Santiago, Chile`,
+            `${sel.nombre}, Santiago, Chile`,
           )}`
+    const tel = sel.contactoTelefono ? telLimpio(sel.contactoTelefono) : null
     return (
       <div className="pb-4">
         <button
@@ -55,26 +61,87 @@ export default function PuntosGaleria() {
               <h2 className="text-xl font-bold text-slate-800">
                 {sel.tipo === 'pendon' ? '🚩' : '🛒'} {sel.nombre}
               </h2>
-              <p className="text-sm text-slate-500">{sel.familia}</p>
+              <p className="text-sm text-slate-500">
+                Punto de predicación ·{' '}
+                {sel.tipo === 'pendon' ? 'Pendón' : 'Carrito'}
+              </p>
 
               <div className="mt-3 space-y-1.5 text-sm text-slate-700">
-                <p>
-                  📍 <b>Lugar de predicación:</b> {sel.lugarAsignacion}
-                </p>
-                <p>
-                  🏠 <b>Retiro del equipo:</b> {sel.lugarRetiro}
-                </p>
                 <p>
                   🕗 <b>Horario:</b> {TURNO}
                 </p>
                 <p>
                   📅 <b>Días:</b>{' '}
-                  {[sel.operaSemana && 'Lunes a viernes', sel.operaSabado && 'Sábado']
+                  {[
+                    sel.operaSemana && 'Lunes a viernes',
+                    sel.operaSabado && 'Sábado',
+                  ]
                     .filter(Boolean)
                     .join(' · ')}
                 </p>
               </div>
             </div>
+          </Tarjeta>
+
+          {/* Retiro del exhibidor + contacto */}
+          <Tarjeta className="p-4">
+            <h3 className="font-bold text-slate-800 mb-2">
+              🛒 Retiro del exhibidor
+            </h3>
+            <div className="space-y-1.5 text-sm text-slate-700">
+              <p>
+                🏠 <b>Dirección:</b> {sel.lugarRetiro}
+              </p>
+              <p>
+                👨‍👩‍👧 <b>{sel.familia}</b>
+              </p>
+            </div>
+
+            {sel.contactoNombre || tel ? (
+              <div className="mt-3 rounded-xl bg-slate-50 border border-slate-200 p-3">
+                <p className="text-xs text-slate-400 font-medium mb-1">
+                  Contacto
+                </p>
+                <div className="flex items-center justify-between gap-2">
+                  <div className="min-w-0">
+                    {sel.contactoNombre && (
+                      <p className="font-semibold text-slate-800 truncate">
+                        {sel.contactoNombre}
+                      </p>
+                    )}
+                    {sel.contactoTelefono && (
+                      <p className="text-sm text-slate-500">
+                        {sel.contactoTelefono}
+                      </p>
+                    )}
+                  </div>
+                  {tel && (
+                    <div className="flex gap-2 shrink-0">
+                      <a
+                        href={`tel:${tel}`}
+                        className="h-11 w-11 flex items-center justify-center rounded-full bg-sky-100 text-xl"
+                        title="Llamar"
+                      >
+                        📞
+                      </a>
+                      <a
+                        href={`https://wa.me/${tel.replace('+', '')}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="h-11 w-11 flex items-center justify-center rounded-full bg-green-100 text-xl"
+                        title="WhatsApp"
+                      >
+                        💬
+                      </a>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <p className="mt-3 text-xs text-slate-400">
+                (Contacto por confirmar — coordina con el encargado)
+              </p>
+            )}
           </Tarjeta>
 
           {/* Mapa */}
@@ -114,7 +181,7 @@ export default function PuntosGaleria() {
                   {p.nombre}
                 </div>
                 <div className="text-xs text-slate-500 mt-0.5">
-                  {p.lugarAsignacion}
+                  Retiro: {p.lugarRetiro} ({p.familia})
                 </div>
                 <div className="mt-1.5">
                   <Etiqueta color="green">Activo</Etiqueta>
