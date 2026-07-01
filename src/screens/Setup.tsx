@@ -16,7 +16,7 @@ export default function Setup() {
       t
         .toLowerCase()
         .normalize('NFD')
-        .replace(/[̀-ͯ]/g, '')
+        .replace(/[\u0300-\u036f]/g, '')
     const q = norm(busca)
     return s.hermanos
       .filter((h) => h.activo)
