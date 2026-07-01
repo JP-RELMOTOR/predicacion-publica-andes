@@ -64,7 +64,7 @@ export default function ProgramaTabla({
                       {fila.punto.nombre}
                     </div>
                     <div className="text-[10px] text-slate-500">
-                      {fila.punto.lugarAsignacion}
+                      Retiro: {fila.punto.lugarRetiro} ({fila.punto.familia})
                     </div>
                   </td>
                   {semana.map((iso) => {
