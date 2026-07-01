@@ -12,6 +12,7 @@ import PuntosGaleria from './screens/PuntosGaleria'
 import Disponibilidad from './screens/Disponibilidad'
 import Admin from './screens/admin/Admin'
 import MenuUsuario from './components/MenuUsuario'
+import AvisoActualizacion from './components/AvisoActualizacion'
 
 type Vista = 'turnos' | 'puntos' | 'disp' | 'admin'
 
