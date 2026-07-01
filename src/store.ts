@@ -152,9 +152,10 @@ let sembrado = false
 function sembrarNube() {
   if (!db || sembrado) return
   sembrado = true
+  // Solo estructura (puntos, mes, config). Los hermanos NO se siembran desde
+  // el código: se gestionan en Admin → Hermanos.
   const ini = estadoInicial()
   const updates: Record<string, unknown> = {}
-  ini.hermanos.forEach((h) => (updates[`hermanos/${h.id}`] = h))
   ini.puntos.forEach((p) => (updates[`puntos/${p.id}`] = p))
   ini.meses.forEach((m) => (updates[`meses/${m.id}`] = m))
   updates['config/mesActivoId'] = ini.mesActivoId
@@ -163,15 +164,30 @@ function sembrarNube() {
   )
 }
 
+// ¿Ya recibimos la primera respuesta de la nube? (para pantallas de carga)
+let nubeLista = !hayNube()
+const nubeListaListeners = new Set<() => void>()
+export function useNubeLista(): boolean {
+  return useSyncExternalStore(
+    (cb) => {
+      nubeListaListeners.add(cb)
+      return () => nubeListaListeners.delete(cb)
+    },
+    () => nubeLista,
+  )
+}
+
 if (hayNube() && db) {
   onValue(ref(db, RAIZ), (snap) => {
     const val = snap.val()
-    if (!val || !val.hermanos) {
-      sembrarNube() // primera vez: cargar semilla a la nube
-      return
+    if (!val) {
+      sembrarNube() // primera vez: cargar estructura a la nube
+    } else {
+      estado = cloudAEstado(val)
+      guardarLocal(estado)
     }
-    estado = cloudAEstado(val)
-    guardarLocal(estado)
+    nubeLista = true
+    nubeListaListeners.forEach((l) => l())
     notify()
   })
 }
