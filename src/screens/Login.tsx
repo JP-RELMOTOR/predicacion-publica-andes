@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { acciones, entrar, useApp } from '../store'
+import { entrar, useApp } from '../store'
 import { Avatar } from '../ui'
 
 export default function Login() {
