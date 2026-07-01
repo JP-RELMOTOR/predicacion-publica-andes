@@ -169,20 +169,17 @@ export default function MisAsignaciones({ hermanoId }: { hermanoId: string }) {
                 </div>
                 <div className="flex-1">
                   <div className="font-bold text-slate-800">
-                    {d.punto?.nombre}
+                    📍 {d.punto?.nombre}
                   </div>
                   <div className="text-sm text-slate-600 mt-0.5">
                     🕗 {TURNO}
                   </div>
-                  {d.punto && (
-                    <div className="text-sm text-slate-600">
-                      📍 {d.punto.lugarAsignacion}
-                    </div>
-                  )}
                   {d.punto?.lugarRetiro && (
                     <div className="text-xs text-slate-500 mt-0.5">
-                      Retiro del carrito: {d.punto.lugarRetiro} (
+                      Retiro del exhibidor: {d.punto.lugarRetiro} (
                       {d.punto.familia})
+                      {d.punto.contactoTelefono &&
+                        ` · ${d.punto.contactoTelefono}`}
                     </div>
                   )}
                   <div className="text-sm text-slate-700 mt-2">
