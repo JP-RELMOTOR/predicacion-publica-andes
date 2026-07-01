@@ -67,15 +67,25 @@ export default function Puntos() {
               }
             />
             <Campo
-              etiqueta="Lugar de retiro"
+              etiqueta="Retiro del exhibidor (dirección)"
               valor={p.lugarRetiro}
               onChange={(v) => acciones.guardarPunto({ ...p, lugarRetiro: v })}
             />
             <Campo
-              etiqueta="Lugar de asignación"
-              valor={p.lugarAsignacion}
+              etiqueta="Contacto retiro (nombre)"
+              valor={p.contactoNombre ?? ''}
               onChange={(v) =>
-                acciones.guardarPunto({ ...p, lugarAsignacion: v })
+                acciones.guardarPunto({ ...p, contactoNombre: v || undefined })
+              }
+            />
+            <Campo
+              etiqueta="Contacto retiro (teléfono)"
+              valor={p.contactoTelefono ?? ''}
+              onChange={(v) =>
+                acciones.guardarPunto({
+                  ...p,
+                  contactoTelefono: v || undefined,
+                })
               }
             />
             <Campo
