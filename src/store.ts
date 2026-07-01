@@ -192,42 +192,91 @@ if (hayNube() && db) {
   })
 }
 
-// ---- Sesión (quién entró) ----
-function cargarSesion(): string | null {
+// ---- Anclaje del dispositivo (quiénes usan este teléfono) ----
+// El teléfono queda "anclado" a 1 o 2 perfiles (matrimonios). Cambiarlo
+// requiere el PIN del encargado (se valida en la interfaz).
+
+export interface Anclaje {
+  anclados: string[] // ids de hermanos anclados a este dispositivo (máx 2)
+  activo: string | null // perfil actualmente activo
+}
+
+function cargarAnclaje(): Anclaje {
   try {
-    return localStorage.getItem(SESION_KEY)
+    const raw = localStorage.getItem(ANCLADOS_KEY)
+    const anclados: string[] = raw ? JSON.parse(raw) : []
+    let activo = localStorage.getItem(ACTIVO_KEY)
+    // migración desde v1 (sesión simple)
+    if (anclados.length === 0) {
+      const legado = localStorage.getItem(SESION_KEY)
+      if (legado) {
+        anclados.push(legado)
+        activo = legado
+        localStorage.setItem(ANCLADOS_KEY, JSON.stringify(anclados))
+        localStorage.setItem(ACTIVO_KEY, legado)
+        localStorage.removeItem(SESION_KEY)
+      }
+    }
+    if (activo && !anclados.includes(activo)) activo = anclados[0] ?? null
+    if (!activo && anclados.length) activo = anclados[0]
+    return { anclados, activo }
   } catch {
-    return null
+    return { anclados: [], activo: null }
   }
 }
-let sesionId: string | null = cargarSesion()
-const sesionListeners = new Set<() => void>()
-export function useSesion(): string | null {
+
+let anclaje: Anclaje = cargarAnclaje()
+const anclajeListeners = new Set<() => void>()
+
+function guardarAnclaje() {
+  try {
+    localStorage.setItem(ANCLADOS_KEY, JSON.stringify(anclaje.anclados))
+    if (anclaje.activo) localStorage.setItem(ACTIVO_KEY, anclaje.activo)
+    else localStorage.removeItem(ACTIVO_KEY)
+  } catch {
+    /* ignora */
+  }
+  anclajeListeners.forEach((l) => l())
+}
+
+export function useAnclaje(): Anclaje {
   return useSyncExternalStore(
     (cb) => {
-      sesionListeners.add(cb)
-      return () => sesionListeners.delete(cb)
+      anclajeListeners.add(cb)
+      return () => anclajeListeners.delete(cb)
     },
-    () => sesionId,
+    () => anclaje,
   )
 }
-export function entrar(hermanoId: string) {
-  sesionId = hermanoId
-  try {
-    localStorage.setItem(SESION_KEY, hermanoId)
-  } catch {
-    /* ignora */
+
+export function anclarPerfil(hermanoId: string) {
+  if (!anclaje.anclados.includes(hermanoId)) {
+    anclaje = {
+      anclados: [...anclaje.anclados, hermanoId].slice(-2),
+      activo: hermanoId,
+    }
+  } else {
+    anclaje = { ...anclaje, activo: hermanoId }
   }
-  sesionListeners.forEach((l) => l())
+  guardarAnclaje()
 }
-export function salir() {
-  sesionId = null
-  try {
-    localStorage.removeItem(SESION_KEY)
-  } catch {
-    /* ignora */
+
+export function cambiarPerfilActivo(hermanoId: string) {
+  if (anclaje.anclados.includes(hermanoId)) {
+    anclaje = { ...anclaje, activo: hermanoId }
+    guardarAnclaje()
   }
-  sesionListeners.forEach((l) => l())
+}
+
+export function quitarPerfil(hermanoId: string) {
+  const anclados = anclaje.anclados.filter((id) => id !== hermanoId)
+  anclaje = { anclados, activo: anclados[0] ?? null }
+  guardarAnclaje()
+}
+
+export function desvincularDispositivo() {
+  anclaje = { anclados: [], activo: null }
+  guardarAnclaje()
 }
 
 // =================== Acciones ===================
