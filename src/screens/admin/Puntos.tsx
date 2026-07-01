@@ -78,6 +78,37 @@ export default function Puntos() {
                 acciones.guardarPunto({ ...p, lugarAsignacion: v })
               }
             />
+            <Campo
+              etiqueta="Foto (URL o ruta)"
+              valor={p.foto ?? ''}
+              onChange={(v) =>
+                acciones.guardarPunto({ ...p, foto: v || undefined })
+              }
+            />
+            <div className="grid grid-cols-2 gap-2">
+              <Campo
+                etiqueta="Latitud"
+                valor={p.lat != null ? String(p.lat) : ''}
+                onChange={(v) => {
+                  const n = parseFloat(v)
+                  acciones.guardarPunto({
+                    ...p,
+                    lat: Number.isFinite(n) ? n : undefined,
+                  })
+                }}
+              />
+              <Campo
+                etiqueta="Longitud"
+                valor={p.lng != null ? String(p.lng) : ''}
+                onChange={(v) => {
+                  const n = parseFloat(v)
+                  acciones.guardarPunto({
+                    ...p,
+                    lng: Number.isFinite(n) ? n : undefined,
+                  })
+                }}
+              />
+            </div>
           </div>
 
           <div className="flex flex-wrap items-center gap-3 text-sm pt-1">
