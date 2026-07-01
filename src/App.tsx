@@ -1,54 +1,81 @@
 import { useEffect, useState } from 'react'
-import { getHermano, salir, useApp, useSesion } from './store'
-import Login from './screens/Login'
+import {
+  desvincularDispositivo,
+  getHermano,
+  useAnclaje,
+  useApp,
+  useNubeLista,
+} from './store'
+import Setup from './screens/Setup'
+import MisAsignaciones from './screens/MisAsignaciones'
+import PuntosGaleria from './screens/PuntosGaleria'
 import Disponibilidad from './screens/Disponibilidad'
-import VerPrograma from './screens/VerPrograma'
 import Admin from './screens/admin/Admin'
+import MenuUsuario from './components/MenuUsuario'
 
-type Vista = 'disp' | 'programa' | 'admin'
+type Vista = 'turnos' | 'puntos' | 'disp' | 'admin'
 
 export default function App() {
   const s = useApp()
-  const sesionId = useSesion()
-  const hermano = sesionId ? getHermano(s, sesionId) : undefined
-  const [vista, setVista] = useState<Vista>('disp')
+  const anclaje = useAnclaje()
+  const nubeLista = useNubeLista()
+  const [vista, setVista] = useState<Vista>('turnos')
 
-  // si la sesión apunta a un hermano que ya no existe, salir
+  const hermano = anclaje.activo ? getHermano(s, anclaje.activo) : undefined
+
+  // si el perfil anclado ya no existe en la lista (y la nube ya cargó), desvincular
   useEffect(() => {
-    if (sesionId && !hermano) salir()
-  }, [sesionId, hermano])
+    if (anclaje.activo && nubeLista && s.hermanos.length > 0 && !hermano) {
+      desvincularDispositivo()
+    }
+  }, [anclaje.activo, nubeLista, s.hermanos.length, hermano])
 
-  if (!hermano) return <Login />
+  if (!anclaje.activo || !hermano) {
+    // sin anclar (o el perfil aún no carga de la nube)
+    if (anclaje.activo && !hermano) {
+      return (
+        <div className="min-h-full flex items-center justify-center text-slate-400">
+          <div className="text-center">
+            <p className="text-3xl mb-2">⏳</p>Cargando…
+          </div>
+        </div>
+      )
+    }
+    return <Setup />
+  }
 
   const nav: { id: Vista; label: string; icono: string }[] = [
-    { id: 'disp', label: 'Disponibilidad', icono: '📅' },
-    { id: 'programa', label: 'Programa', icono: '📋' },
+    { id: 'turnos', label: 'Mis Turnos', icono: '🗓️' },
+    { id: 'puntos', label: 'Puntos', icono: '📍' },
+    { id: 'disp', label: 'Disponibilidad', icono: '✅' },
   ]
-  if (hermano.esAdmin)
-    nav.push({ id: 'admin', label: 'Admin', icono: '🛠️' })
+  if (hermano.esAdmin) nav.push({ id: 'admin', label: 'Admin', icono: '🛠️' })
+
+  const titulos: Record<Vista, string> = {
+    turnos: 'Mis Asignaciones',
+    puntos: 'Puntos de Predicación',
+    disp: 'Mi Disponibilidad',
+    admin: 'Administración',
+  }
 
   return (
     <div className="min-h-full flex flex-col bg-slate-100">
       {/* Encabezado */}
-      <header className="no-print bg-sky-800 text-white px-4 py-3 flex items-center justify-between sticky top-0 z-20">
+      <header className="no-print bg-sky-800 text-white px-4 py-2.5 flex items-center justify-between sticky top-0 z-20">
         <div>
-          <div className="text-xs text-sky-200 leading-none">
+          <div className="text-[11px] text-sky-200 leading-none">
             Predicación Pública · Andes
           </div>
-          <div className="font-semibold leading-tight">{hermano.nombre}</div>
+          <div className="font-semibold leading-tight">{titulos[vista]}</div>
         </div>
-        <button
-          onClick={salir}
-          className="text-sm text-sky-100 bg-sky-700 hover:bg-sky-600 rounded-lg px-3 py-1.5"
-        >
-          Salir
-        </button>
+        <MenuUsuario hermano={hermano} />
       </header>
 
       {/* Contenido */}
       <main className="flex-1 overflow-y-auto pb-20">
+        {vista === 'turnos' && <MisAsignaciones hermanoId={hermano.id} />}
+        {vista === 'puntos' && <PuntosGaleria />}
         {vista === 'disp' && <Disponibilidad hermanoId={hermano.id} />}
-        {vista === 'programa' && <VerPrograma hermanoId={hermano.id} />}
         {vista === 'admin' && hermano.esAdmin && <Admin />}
       </main>
 
@@ -58,11 +85,17 @@ export default function App() {
           <button
             key={n.id}
             onClick={() => setVista(n.id)}
-            className={`flex-1 py-2.5 flex flex-col items-center gap-0.5 text-xs font-medium ${
+            className={`flex-1 py-2 flex flex-col items-center gap-0.5 text-[11px] font-medium ${
               vista === n.id ? 'text-sky-700' : 'text-slate-400'
             }`}
           >
-            <span className="text-lg">{n.icono}</span>
+            <span
+              className={`text-lg px-3 rounded-full ${
+                vista === n.id ? 'bg-sky-100' : ''
+              }`}
+            >
+              {n.icono}
+            </span>
             {n.label}
           </button>
         ))}
