@@ -14,7 +14,6 @@ export default function Puntos() {
       tipo: 'carrito',
       familia: '',
       lugarRetiro: '',
-      lugarAsignacion: '',
       operaSemana: true,
       operaSabado: true,
       activo: true,
