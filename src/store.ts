@@ -34,7 +34,7 @@ function estadoInicial(): AppState {
   const id = makeMesId(anio, mes)
   const mesActivo: Mes = { id, anio, mes, abierto: true, publicado: false }
   return {
-    hermanos: HERMANOS_SEMILLA,
+    hermanos: [],
     puntos: PUNTOS_SEMILLA,
     meses: [mesActivo],
     disponibilidad: [],
