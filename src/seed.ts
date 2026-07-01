@@ -7,9 +7,20 @@ import type { Punto } from './types'
 // público). La lista de hermanos vive únicamente en Firebase; los admins la
 // gestionan desde Admin → Hermanos.
 export const PUNTOS_SEMILLA: Punto[] = [
+  // San Pablo / Radal tiene DOS posiciones: una en cada esquina.
   {
     id: 'p_correa',
-    nombre: 'San Pablo / Radal',
+    nombre: 'San Pablo / Radal 1',
+    tipo: 'carrito',
+    familia: 'Familia Correa',
+    lugarRetiro: 'Tadeo Vargas 892',
+    operaSemana: true,
+    operaSabado: true,
+    activo: true,
+  },
+  {
+    id: 'p_correa2',
+    nombre: 'San Pablo / Radal 2',
     tipo: 'carrito',
     familia: 'Familia Correa',
     lugarRetiro: 'Tadeo Vargas 892',
