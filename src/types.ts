@@ -24,6 +24,9 @@ export interface Punto {
   operaSemana: boolean // ¿funciona de lunes a viernes?
   operaSabado: boolean // ¿funciona el sábado?
   activo: boolean
+  foto?: string // URL o ruta de la foto del punto
+  lat?: number // coordenadas para el mapa (opcional)
+  lng?: number
 }
 
 export interface Hermano {
