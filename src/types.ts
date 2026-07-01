@@ -16,11 +16,15 @@ export const DIAS_SEMANA = [
 
 export interface Punto {
   id: string
+  // Nombre del PUNTO = lugar donde se predica (ej: "San Pablo / Radal").
   nombre: string
   tipo: TipoPunto
+  // Retiro del exhibidor: dónde y con quién se retira el carrito/pendón.
   familia: string
   lugarRetiro: string
-  lugarAsignacion: string
+  contactoNombre?: string // persona de contacto para el retiro
+  contactoTelefono?: string // teléfono del contacto (formato +569…)
+  lugarAsignacion?: string // legado (ya no se usa; el nombre ES el punto)
   operaSemana: boolean // ¿funciona de lunes a viernes?
   operaSabado: boolean // ¿funciona el sábado?
   activo: boolean
