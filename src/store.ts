@@ -14,11 +14,13 @@ import type {
   Mes,
   Punto,
 } from './types'
-import { HERMANOS_SEMILLA, PUNTOS_SEMILLA } from './seed'
+import { PUNTOS_SEMILLA } from './seed'
 import { mesId as makeMesId } from './lib/dates'
 
 const STORAGE_KEY = 'ppa_estado_v1'
-const SESION_KEY = 'ppa_sesion_v1'
+const SESION_KEY = 'ppa_sesion_v1' // legado (v1): un solo perfil
+const ANCLADOS_KEY = 'ppa_anclados_v1' // v2: perfiles anclados al dispositivo
+const ACTIVO_KEY = 'ppa_activo_v1' // v2: perfil activo
 
 function estadoInicial(): AppState {
   const ahora = new Date()
