@@ -80,6 +80,9 @@ export default function App() {
         {vista === 'admin' && hermano.esAdmin && <Admin />}
       </main>
 
+      {/* Aviso de versión nueva */}
+      <AvisoActualizacion />
+
       {/* Navegación inferior */}
       <nav className="no-print fixed bottom-0 inset-x-0 bg-white border-t border-slate-200 flex z-20">
         {nav.map((n) => (
